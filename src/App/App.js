@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Route} from 'react-router-dom'
+import { Route, Link} from 'react-router-dom'
+import FolderList from '../FolderList/FolderList'
 import NoteList from '../NoteList/NoteList'
 import STORE from '../dummy-store'
 import './App.css';
@@ -10,14 +11,20 @@ export default class App extends Component {
     notes: []
   }
 
-// renderMainPage() {
-//   const {folders, notes} = this.state;
-
-// }
-  render() {
-    console.log(STORE);
+componentDidMount() {
+  this.setState({
+    state: STORE
+  })
+}
+  render() {  
     return (
       <div className="App">
+        <Link to='/'><h1>Noteful</h1></Link>
+        <Route
+                exact
+                path="/"
+                render={() => <FolderList folders={STORE.folders} />}
+            />
         <Route
                 exact
                 path="/"
