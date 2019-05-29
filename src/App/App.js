@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Route} from 'react-router-dom'
+import { Route, Link} from 'react-router-dom'
+import FolderList from '../FolderList/FolderList'
 import NoteList from '../NoteList/NoteList'
 import STORE from '../dummy-store'
 import './App.css';
@@ -9,26 +10,65 @@ export default class App extends Component {
     folders: [],
     notes: []
   }
+    
+componentDidMount() {
+  this.setState({
+    folders: STORE.folders,
+    notes: STORE.notes,
+  })
+}
 
-// renderMainPage() {
-//   const {folders, notes} = this.state;
+getNotesForFolder(notes, id) {
+  return notes.filter(note => note.folderId === id)
+}
 
-// }
+  render() {  
+    const { folders, notes } = this.state;
+    // const folders = STORE.folders;
+    // const notes = STORE.notes;
+    console.log(folders);
 
-//create filter functions? find specific folder ID
-
-  render() {
-    console.log(STORE);
     return (
-      //add nav section with two routes (main list and 'back')
-      //add second main route for note & create component
-        //pass in shorthand (...props) for match/history/location
-        //pass in folders prop
       <div className="App">
-        <Route
+        <Link to='/'><h1>Noteful</h1></Link>
+          <Route
+                exact
+                path="/"
+                render={props => 
+                <FolderList 
+                  folders={folders} 
+                  {...props}
+                  />}
+            />
+            <Route
+                exact
+                path="/folders/:folderId"
+                render={props => 
+                <FolderList 
+                  folders={folders} 
+                  {...props}
+                  />}
+            />
+
+
+          <Route
                 exact
                 path="/"
                 render={() => <NoteList notes={STORE.notes} />}
+            />
+          <Route
+                exact
+                path="/folders/:folderId"
+                render={props => {
+                  const { folderId } = props.match.params;
+                  const notesForFolder = this.getNotesForFolder(notes, folderId);
+                  console.log(notesForFolder);
+                return (
+                  <NoteList 
+                    notes={notesForFolder} 
+                    {...props}
+                  />
+                )}}
             />
       </div>
     )
