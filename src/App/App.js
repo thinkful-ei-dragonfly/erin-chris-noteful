@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Route, Link} from 'react-router-dom'
 import FolderList from '../FolderList/FolderList'
 import NoteList from '../NoteList/NoteList'
+import Note from '../Note/Note'
 import STORE from '../dummy-store'
+import ExpandedNote from '../ExpandedNote/ExpandedNote'
 import './App.css';
 
 export default class App extends Component {
@@ -20,6 +22,10 @@ componentDidMount() {
 
 getNotesForFolder(notes, id) {
   return notes.filter(note => note.folderId === id)
+}
+
+findNote(notes, noteId) {
+ return notes.find(note => note.id === noteId)
 }
 
   render() {  
@@ -66,6 +72,20 @@ getNotesForFolder(notes, id) {
                 return (
                   <NoteList 
                     notes={notesForFolder} 
+                    {...props}
+                  />
+                )}}
+            />
+            <Route
+                exact
+                path="/notes/:noteId"
+                render={props => {
+                  const { noteId } = props.match.params;
+                  const note = this.findNote(notes, noteId);
+                  console.log(note);
+                return (
+                  <ExpandedNote
+                    notes={note} 
                     {...props}
                   />
                 )}}
