@@ -6,6 +6,7 @@ import Note from '../Note/Note'
 import STORE from '../dummy-store'
 import ExpandedNote from '../ExpandedNote/ExpandedNote'
 import './App.css';
+import GoBack from '../GoBack/Goback';
 
 export default class App extends Component {
   state = {
@@ -26,6 +27,10 @@ getNotesForFolder(notes, id) {
 
 findNote(notes, noteId) {
  return notes.find(note => note.id === noteId)
+}
+
+findFolder(folders, folderID) {
+  return folders.find(folder => folder.id === folderID)
 }
 
   render() {  
@@ -55,7 +60,18 @@ findNote(notes, noteId) {
                   {...props}
                   />}
             />
-
+          <Route 
+                exact
+                path="/notes/:noteId"
+                render={props => {
+                  const { noteId } = props.match.params;
+                  const note = this.findNote(notes, noteId)
+                  const folder = this.findFolder(folders, note.folderId)
+                  return (
+                    <GoBack {...props}/>
+                  )
+                }}
+          />
 
           <Route
                 exact
