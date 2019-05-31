@@ -1,12 +1,17 @@
 import React from 'react';
 import Note from '../Note/Note';
+import NotefulContext from '../NotefulContext';
 import { Route, Link } from 'react-router-dom'
 
-export default function NoteListMain(props) {
+
+export default class NoteList extends React.Component {
+    static contextType = NotefulContext;
+    render() {
+    //const { name, id, modified } = this.props
     return (
       <section className='NoteListMain'>
         <ul>
-          {props.notes.map(note =>
+          {this.context.notes.map(note =>
             <li key={note.id}>
               <Note
                 id={note.id}
@@ -18,4 +23,5 @@ export default function NoteListMain(props) {
         </ul>
       </section>
     )
+}
 }
